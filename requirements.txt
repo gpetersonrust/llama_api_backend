@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+pydantic
+ollama
+slowapi
+python-dotenv
