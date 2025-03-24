@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>semantic_search.ipynb – Notebook Outline</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+      color: #212529;
+      line-height: 1.6;
+      margin: 40px;
+    }
+
+    hr{
+      border: 0;
+      height: 1px;
+      background-color: #dee2e6;
+      margin: 40px 0;
+    }
+
+    h1, h2 {
+      color: #343a40;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #dee2e6;
+      padding-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p, li {
+      font-size: 1rem;
+    }
+
+    pre {
+      background-color: #e9ecef;
+      padding: 10px;
+      border-left: 4px solid #adb5bd;
+      overflow-x: auto;
+    }
+
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul {
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    code {
+      background: #f1f3f5;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📘 semantic_search.ipynb – Notebook Outline</h1>
+
+  <h2>🧠 Project Context</h2>
+  <p>
+    You’re building a retrieval-augmented chatbot using FastAPI, Ollama, FAISS, ChromaDB, and LangChain.
+    The goal is to return pre-approved answers whenever possible and only generate new responses using LLaMA3 (8B) if no relevant answer is found.
+    This notebook walks you through the full RAG pipeline before it’s added to <code>llama_api_backend-main.zip</code>.
+  </p>
+
+  <h2>📑 Table of Contents (with Docs + Function Suggestions)</h2>
+
+  <h3>1. Setup & Environment</h3>
+  <ul>
+    <li>Install packages, import modules, create <code>Stores/</code></li>
+    <li><a href="https://python.langchain.com/docs/get_started/installation" target="_blank">LangChain Installation</a></li>
+    <li><a href="https://python.langchain.com/docs/integrations/vectorstores/faiss" target="_blank">FAISS Setup</a></li>
+    <li><a href="https://python.langchain.com/docs/integrations/vectorstores/chroma" target="_blank">Chroma Setup</a></li>
+    <pre><code>def setup_environment(): ...</code></pre>
+  </ul>
+
+  <h3>2. Keyword Extraction</h3>
+  <ul>
+    <li>Use Ollama 2B model to extract keywords</li>
+    <li><a href="https://ollama.com/library" target="_blank">Ollama Library</a></li>
+    <li><a href="https://python.langchain.com/docs/modules/model_io/llms/" target="_blank">LangChain LLMs</a></li>
+    <pre><code>def extract_keywords_from_prompt(prompt: str) -> list: ...</code></pre>
+  </ul>
+
+  <h3>3. Load & Inspect Q&A Data</h3>
+  <ul>
+    <li>Load questions, answers, tags, etc.</li>
+    <li><a href="https://python.langchain.com/docs/modules/data_connection/document_loaders/json" target="_blank">LangChain JSON Loader</a></li>
+    <pre><code>def load_qa_json(path: str) -> list[dict]: ...</code></pre>
+  </ul>
+
+  <h3>4. Token-Aware Text Splitting</h3>
+  <ul>
+    <li>Use <code>RecursiveCharacterTextSplitter.from_tiktoken_encoder()</code></li>
+    <li><a href="https://python.langchain.com/docs/modules/data_connection/document_transformers/recursive_text_splitter" target="_blank">Text Splitter Docs</a></li>
+    <pre><code>def chunk_documents(docs: list[dict]) -> list[Document]: ...</code></pre>
+  </ul>
+
+  <h3>5. Embedding with nomic-embed-text</h3>
+  <ul>
+    <li>Embed documents using <code>ollama.Embedding(model="nomic-embed-text")</code></li>
+    <li><a href="https://python.langchain.com/docs/guides/embeddings" target="_blank">LangChain Embedding Guide</a></li>
+    <pre><code>def embed_documents(docs: list[Document]) -> list: ...</code></pre>
+  </ul>
+
+  <h3>6. Vector Store Setup</h3>
+  <ul>
+    <li>FAISS for semantic → Chroma for keyword/BM25</li>
+    <li><a href="https://python.langchain.com/docs/integrations/vectorstores/faiss" target="_blank">FAISS</a></li>
+    <li><a href="https://docs.trychroma.com/usage-guide" target="_blank">Chroma Usage Guide</a></li>
+    <pre><code>def build_vector_stores(embedded_docs: list, raw_docs: list): ...</code></pre>
+  </ul>
+
+  <h3>7. EnsembleRetriever Setup</h3>
+  <ul>
+    <li>Combine FAISS + Chroma with weight tuning</li>
+    <li><a href="https://python.langchain.com/docs/how_to/ensemble_retriever/" target="_blank">EnsembleRetriever Docs</a></li>
+    <pre><code>def get_ensemble_retriever() -> EnsembleRetriever: ...</code></pre>
+  </ul>
+
+  <h3>8. Query, Filter, and Score</h3>
+  <ul>
+    <li>Run queries + apply cosine similarity threshold</li>
+    <li><a href="https://python.langchain.com/docs/modules/data_connection/retrievers/" target="_blank">Retriever Querying</a></li>
+    <pre><code>def retrieve_relevant_chunks(query: str, retriever, threshold: float = 0.8) -> list: ...</code></pre>
+  </ul>
+
+  <h3>9. Reranking with Small Model</h3>
+  <ul>
+    <li>Use Ollama 2B to rerank top results</li>
+    <li><a href="https://python.langchain.com/docs/guides/retrievers/re-ranking" target="_blank">Reranking Guide</a></li>
+    <pre><code>def rerank_documents(query: str, candidates: list) -> dict: ...</code></pre>
+  </ul>
+
+  <h3>10. Final Answer Decision</h3>
+  <ul>
+    <li>Return <code>knowledge_base</code> or fall back to <code>ollama.chat()</code></li>
+    <li><a href="https://python.langchain.com/docs/modules/model_io/output_parsers/" target="_blank">LangChain Output Parsers</a></li>
+    <pre><code>def route_final_answer(query: str, candidates: list) -> dict: ...</code></pre>
+  </ul>
+
+  <h3>11. Save Metadata</h3>
+  <ul>
+    <li>Save extracted keywords, unanswered prompts</li>
+    <pre><code>def save_keywords_and_logs(keywords: list, unanswered: list): ...</code></pre>
+  </ul>
+
+
+  <hr />
+
+  <h2>🧱 1. Setup & Environment</h2>
+
+<p>
+  Before anything else, we need to prepare our environment to support the full RAG pipeline. This includes installing core dependencies, importing required libraries, and preparing the <code>Stores/</code> directory to hold our persistent vector databases (FAISS and Chroma).
+</p>
+
+<h3>📦 Required Dependencies</h3>
+
+<ul>
+  <li><code>langchain==0.1.13</code> – Framework for chaining LLMs, vector search, and document management</li>
+  <li><code>faiss-cpu==1.7.4</code> – Vector similarity search engine used for dense semantic retrieval</li>
+  <li><code>chromadb==0.4.22</code> – Lightweight keyword/BM25-style vector database for sparse retrieval</li>
+  <li><code>ollama==0.1.8</code> – Interface for local LLaMA3-based models (inference and embedding)</li>
+  <li><code>tiktoken==0.5.1</code> – Tokenization utility for model-compatible chunking</li>
+  <li><code>openai==1.12.0</code> – Required internally by LangChain for embedding API compatibility</li>
+  <li><code>python-dotenv==1.0.1</code> – Load secrets and model names from environment variables</li>
+  <li><code>nltk>=3.8.1</code> – (Optional) for text preprocessing and keyword utility</li>
+  <li><code>scikit-learn</code> – Used internally for similarity math (e.g., cosine scores)</li>
+  <li><code>transformers</code> – (Optional) for reranking or small-model processing if needed</li>
+</ul>
+
+<h3>🔧 Installation</h3>
+
+<pre><code>pip install langchain==0.1.13 faiss-cpu==1.7.4 chromadb==0.4.22 \ 
+    tiktoken==0.5.1 openai==1.12.0 python-dotenv==1.0.1 \
+    nltk scikit-learn transformers ollama==0.1.8
+</code></pre>
+
+<h3>🗂️ Directory Structure</h3>
+
+<p>
+  Ensure your project includes a <code>Stores/</code> folder where FAISS and Chroma index files will be persisted between runs.
+</p>
+
+<pre><code>llama_api_backend/
+├── Stores/
+│   ├── faiss_index/
+│   └── chroma_index/
+├── semantic_search.ipynb
+├── app/
+│   └── ...
+</code></pre>
+
+<h3>🔁 Function Template</h3>
+
+<pre><code>def setup_environment():
+    import os
+
+    # Create necessary directories for vector stores
+    os.makedirs("Stores/faiss_index", exist_ok=True)
+    os.makedirs("Stores/chroma_index", exist_ok=True)
+
+    print("✅ Environment ready – vector store folders created.")
+</code></pre>
+
+<h3>🔗 Helpful Links</h3>
+<ul>
+  <li><a href="https://python.langchain.com/docs/get_started/installation" target="_blank">LangChain Installation Guide</a></li>
+  <li><a href="https://python.langchain.com/docs/integrations/vectorstores/faiss" target="_blank">FAISS Vector Store Docs</a></li>
+  <li><a href="https://python.langchain.com/docs/integrations/vectorstores/chroma" target="_blank">ChromaDB Integration Guide</a></li>
+</ul>
+
+
+<hr />
+
+<h2>🔍 2. Keyword Extraction</h2>
+
+<p>
+  In this step, we extract <strong>core keywords or named entities</strong> from the user’s query using a lightweight Ollama model (e.g., 2B). This helps drive downstream processes like:
+</p>
+
+<ul>
+  <li>Optional BM25-style keyword retrieval (via ChromaDB)</li>
+  <li>UI suggestions for pre-populated follow-up questions in WordPress</li>
+  <li>Future analytics or relevance scoring</li>
+</ul>
+
+<h3>🤖 Why Use a Model for Keywords?</h3>
+
+<p>
+  Instead of relying on brittle rule-based extractors, we use a **small LLaMA model via Ollama** to semantically extract high-value tokens, even across diverse domains. This gives us:
+</p>
+
+<ul>
+  <li>More intelligent phrasing (e.g., detecting “auto insurance” vs “auto” + “insurance”)</li>
+  <li>Fewer false positives than pure TF-IDF or regex</li>
+  <li>A consistent JSON structure for downstream tools</li>
+</ul>
+
+<h3>🧠 System Prompt</h3>
+
+<p>
+  The following system prompt guides the model to extract 2–5 of the most important keywords or named entities:
+</p>
+
+<pre><code>{
+  "role": "system",
+  "content": "You are a helpful assistant that extracts 2 to 5 meaningful keywords or named entities from a user prompt. Return them as a Python list of lowercase strings. Avoid stopwords, articles, and general terms."
+}
+</code></pre>
+
+<h3>🔁 Function Template</h3>
+
+<pre><code>from ollama import chat
+
+def extract_keywords_from_prompt(prompt: str) -> list[str]:
+    system_prompt = {
+        "role": "system",
+        "content": (
+            "You are a helpful assistant that extracts 2 to 5 meaningful keywords or named entities "
+            "from a user prompt. Return them as a Python list of lowercase strings. "
+            "Avoid stopwords, articles, and general terms."
+        )
+    }
+
+    user_prompt = {"role": "user", "content": prompt}
+
+    try:
+        response = chat(
+            model="llama2:2b",  # or any small/fast Ollama model
+            messages=[system_prompt, user_prompt]
+        )
+
+        raw_output = response.get("message", {}).get("content", "[]")
+        keywords = eval(raw_output.strip()) if isinstance(raw_output, str) else []
+
+        # Optional: basic sanitization
+        return [kw.lower().strip() for kw in keywords if isinstance(kw, str)]
+
+    except Exception as e:
+        print(f"❌ Keyword extraction failed: {e}")
+        return []
+</code></pre>
+
+<h3>💾 Optional Logging</h3>
+
+<p>
+  Store the extracted keywords in a local file (e.g., <code>extracted_keywords.json</code>) for:
+</p>
+
+<ul>
+  <li>Debugging</li>
+  <li>Training future ranking models</li>
+  <li>WordPress frontend suggestions</li>
+</ul>
+
+<pre><code>import json
+
+def save_keywords_to_json(prompt: str, keywords: list[str]):
+    log_path = "Stores/extracted_keywords.json"
+
+    try:
+        existing = []
+        if os.path.exists(log_path):
+            with open(log_path, "r") as f:
+                existing = json.load(f)
+
+        existing.append({"prompt": prompt, "keywords": keywords})
+
+        with open(log_path, "w") as f:
+            json.dump(existing, f, indent=2)
+
+    except Exception as e:
+        print(f"⚠️ Could not save keywords: {e}")
+</code></pre>
+
+<h3>🔗 References</h3>
+<ul>
+  <li><a href="https://ollama.com/library" target="_blank">Ollama Model Library</a></li>
+  <li><a href="https://python.langchain.com/docs/modules/model_io/llms/" target="_blank">LangChain LLMs (Optional)</a></li>
+</ul>
+
+<hr />
+
+<h2>📥 3. Load & Index Q&A Data (FAISS + Chroma)</h2>
+
+<p>
+  In this step, we’ll use a custom class to handle loading, chunking, embedding, and indexing our Q&A JSON data into two vector databases:
+</p>
+
+<ul>
+  <li><strong>FAISS</strong> – for dense semantic search using vector embeddings</li>
+  <li><strong>ChromaDB</strong> – for keyword/BM25-based sparse retrieval</li>
+</ul>
+
+<h3>🧠 Class-Based Design</h3>
+
+<p>
+  We’ll use a Python class called <code>QADocumentIndexer</code> to encapsulate all steps:
+</p>
+
+<ul>
+  <li>Load and parse Q&A JSON</li>
+  <li>Optionally chunk text (for FAISS)</li>
+  <li>Embed and store in FAISS</li>
+  <li>Store raw documents in Chroma for BM25</li>
+</ul>
+
+<hr />
+
+<h3>📦 QADocumentIndexer (Full Code)</h3>
+
+<pre><code>import os
+import json
+from typing import List
+from langchain.schema import Document
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.vectorstores import FAISS, Chroma
+from langchain.embeddings import OllamaEmbeddings
+
+class QADocumentIndexer:
+    def __init__(self, json_path: str,
+                 faiss_dir: str = "Stores/faiss_index",
+                 chroma_dir: str = "Stores/chroma_index",
+                 embedding_model: str = "nomic-embed-text"):
+        self.json_path = json_path
+        self.faiss_dir = faiss_dir
+        self.chroma_dir = chroma_dir
+        self.embedding = OllamaEmbeddings(model=embedding_model)
+        self.raw_docs: List[Document] = []
+        self.chunked_docs: List[Document] = []
+        os.makedirs(faiss_dir, exist_ok=True)
+        os.makedirs(chroma_dir, exist_ok=True)
+
+    def load_qa_json(self):
+        with open(self.json_path, "r", encoding="utf-8") as f:
+            qa_data = json.load(f)
+        self.raw_docs = [
+            Document(
+                page_content=entry["answer"],
+                metadata={
+                    "questions": entry.get("questions", []),
+                    "tags": entry.get("tags", []),
+                    "confidence": entry.get("confidence", 0.0),
+                    "source": entry.get("source", "unknown"),
+                    "approved": entry.get("approved", False)
+                }
+            ) for entry in qa_data
+        ]
+        print(f"✅ Loaded {len(self.raw_docs)} raw documents.")
+
+    def chunk_documents(self, chunk_size=512, chunk_overlap=50):
+        splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+            chunk_size=chunk_size, chunk_overlap=chunk_overlap
+        )
+        self.chunked_docs = splitter.split_documents(self.raw_docs)
+        print(f"✂️ Chunked into {len(self.chunked_docs)} documents for FAISS.")
+
+    def index_to_faiss(self):
+        if not self.chunked_docs:
+            raise ValueError("No chunks. Run chunk_documents() first.")
+        faiss_store = FAISS.from_documents(self.chunked_docs, self.embedding)
+        faiss_store.save_local(self.faiss_dir)
+        print(f"✅ FAISS index saved to: {self.faiss_dir}")
+
+    def index_to_chroma(self):
+        if not self.raw_docs:
+            raise ValueError("No raw docs. Run load_qa_json() first.")
+        chroma_store = Chroma.from_documents(
+            documents=self.raw_docs,
+            embedding=None,  # No need for embeddings in BM25
+            persist_directory=self.chroma_dir,
+            collection_name="qa_bm25"
+        )
+        chroma_store.persist()
+        print(f"✅ ChromaBM25 index saved to: {self.chroma_dir}")
+
+    def run_all(self):
+        self.load_qa_json()
+        self.chunk_documents()
+        self.index_to_faiss()
+        self.index_to_chroma()
+        print("🚀 Full Q&A indexing completed.")
+</code></pre>
+
+<h3>🧪 Usage Example</h3>
+
+<pre><code># One-liner
+indexer = QADocumentIndexer("data/sample_qa_pairs.json")
+indexer.run_all()
+
+# Or step-by-step
+indexer = QADocumentIndexer("data/sample_qa_pairs.json")
+indexer.load_qa_json()
+indexer.chunk_documents()
+indexer.index_to_faiss()
+indexer.index_to_chroma()
+</code></pre>
+
+<h3>📁 Result</h3>
+<p>This class will create the following persistent folders:</p>
+
+<ul>
+  <li><code>Stores/faiss_index/</code> → used by FAISS retriever</li>
+  <li><code>Stores/chroma_index/</code> → used by Chroma (BM25 keyword search)</li>
+</ul>
+
+<h3>🔗 Next Step</h3>
+<p>Move on to <strong>Chapter 4</strong> to set up <code>EnsembleRetriever</code> and perform real hybrid searches.</p>
+
+
+</body>
+</html>

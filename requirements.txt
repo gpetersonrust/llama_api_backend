@@ -1,6 +1,21 @@
+# Core
 fastapi
 uvicorn[standard]
 pydantic
 ollama
 slowapi
 python-dotenv
+
+# LangChain Stack
+langchain
+faiss-cpu
+chromadb
+tiktoken
+openai    # Required internally by LangChain
+
+# NLP / Math
+nltk
+scikit-learn
+
+# Optional for reranking
+transformers

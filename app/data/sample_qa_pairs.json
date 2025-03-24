@@ -1,0 +1,87 @@
+[
+  {
+    "questions": [
+      "What did the Mueller report conclude about Trump's campaign and Russian interference?",
+      "Did Mueller find any conspiracy between Trump and Russia?",
+      "What was the final outcome of the Mueller investigation?"
+    ],
+    "answer": "The Mueller report, submitted in March 2019, did not establish that members of the Trump campaign conspired or coordinated with the Russian government in its election interference activities.",
+    "tags": [
+      "mueller",
+      "investigation",
+      "trump",
+      "russia"
+    ],
+    "confidence": 0.95,
+    "source": "generated",
+    "approved": true
+  },
+  {
+    "questions": [
+      "What happened during the December 2016 Trump Tower meeting?",
+      "Who attended the secret Trump Tower meeting with Russians?",
+      "Why was Jared Kushner interested in setting up a secret communication channel with Russia?"
+    ],
+    "answer": "In December 2016, Jared Kushner, Michael Flynn, and Russian ambassador Sergey Kislyak met at Trump Tower. Kushner reportedly requested a direct, Russian-encrypted communication channel to speak with Russian officials, which raised security concerns and was ultimately not established.",
+    "tags": [
+      "kushner",
+      "kislyak",
+      "trump tower",
+      "russia"
+    ],
+    "confidence": 0.94,
+    "source": "generated",
+    "approved": true
+  },
+  {
+    "questions": [
+      "Who is Paul Manafort and what charges did he face?",
+      "Was Manafort involved with Russian operatives?",
+      "How did Manafort cooperate with the Mueller investigation?"
+    ],
+    "answer": "Paul Manafort, Trump\u2019s former campaign chairman, had repeated contacts with Russian intelligence officials during the 2016 campaign. He was indicted and eventually pleaded guilty to conspiracy charges, agreeing to cooperate with the Mueller investigation.",
+    "tags": [
+      "manafort",
+      "indictment",
+      "mueller",
+      "trump campaign"
+    ],
+    "confidence": 0.96,
+    "source": "generated",
+    "approved": true
+  },
+  {
+    "questions": [
+      "What role did Michael Flynn play in the Russia investigation?",
+      "Why did Flynn resign as National Security Advisor?",
+      "Did Flynn lie about his contacts with Russian officials?"
+    ],
+    "answer": "Michael Flynn resigned in February 2017 after it was revealed he had discussed U.S. sanctions with Russian ambassador Sergey Kislyak and misled U.S. officials about the nature of those communications. He later pleaded guilty to lying to the FBI.",
+    "tags": [
+      "michael flynn",
+      "kislyak",
+      "sanctions",
+      "resignation"
+    ],
+    "confidence": 0.95,
+    "source": "generated",
+    "approved": true
+  },
+  {
+    "questions": [
+      "What were the findings of the Senate Intelligence Committee on Trump and Russia?",
+      "Did the Senate report support or contradict the Mueller findings?",
+      "What did the bipartisan Senate report say about Russia\u2019s interference?"
+    ],
+    "answer": "The bipartisan Senate Intelligence Committee concluded that the Trump transition team held secretive meetings with Russian representatives following the 2016 election and did not intend to hold Russia accountable for interfering. This signaled alignment rather than resistance to Russian efforts.",
+    "tags": [
+      "senate report",
+      "russia",
+      "interference",
+      "trump transition"
+    ],
+    "confidence": 0.94,
+    "source": "generated",
+    "approved": true
+  }
+]
